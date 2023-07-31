@@ -15,6 +15,8 @@ let mobile = false;
 let showShadow = false;
 let skippedProblems = [];
 let showSkipped = false;
+
+let origtex = "";
 let pfwiki = false;
 
 function mobileCheck() {
@@ -180,7 +182,6 @@ async function loadProblem() {
     }
 
     let target;
-    let origtex;
     // load problem
     if (pfwiki) {
         target = await (await fetch("http://localhost:3000/pfwiki")).json();
@@ -316,6 +317,14 @@ $(document).ready(function() {
     $("#skip-button").click(function() {
         skippedProblems.push(problemNumber - 1);
         loadProblem();
+    });
+
+    $("#solution-button").click(function() {
+        let e = $("#solution-latex")[0];
+        let f = $("#solution-title")[0];
+        e.hidden = !e.hidden;
+        f.hidden = !f.hidden;
+        $("#solution-latex")[0].innerText = origtex;
     });
 
     $("#show-skipped-button").click(function() {
