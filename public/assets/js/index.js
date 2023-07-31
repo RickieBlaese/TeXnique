@@ -185,18 +185,7 @@ async function loadProblem() {
     if (pfwiki) {
         target = await (await fetch("http://localhost:3000/pfwiki")).json();
         origtex = target.latex;
-        let t = String.raw`\newcommand{\map}[1]{#1(\checknextarg} \newcommand{\checknextarg}{\@ifnextchar\bgroup{\gobblenextarg}{)}} \newcommand{\gobblenextarg}[1]{, #1\@ifnextchar\bgroup{\gobblenextarg}{)}}` + "\n" +
-            String.raw`\newcommand{\set}[1]{\{#1\checknextarg} \newcommand{\setchecknextarg}{\@ifnextchar\bgroup{\setgobblenextarg}{\}}} \newcommand{\setgobblenextarg}[1]{, #1\@ifnextchar\bgroup{\setgobblenextarg}{\}}}` + "\n";
-        for (const [name, cmd] of Object.entries(macros)) {
-            t += "\\providecommand\\" + name;
-            if (typeof cmd == "string") {
-                t += "{" + cmd + "}";
-            } else {
-                t += "[" + cmd[1] + "]{" + cmd[0] + "}";
-            }
-            t += "\n";
-        }
-        target.latex = t + target.latex;
+        target.latex = macroscmd + target.latex;
     } else {
         target = problems[problemsOrder[problemNumber % problems.length]];
         if (debug) {
@@ -243,13 +232,23 @@ function validateProblem() {
     }
 
     oldVal = currentVal;
+    currentVal = macroscmd + currentVal;
     // action to be performed on textarea changed
-    katex.render(currentVal, $("#out")[0], {
-        throwOnError: false,
-        displayMode: true
-    });
+    try {
+        katex.render(currentVal, $("#out")[0], {
+            throwOnError: true,
+            displayMode: true
+        });
+    } catch (e) {
+        if (e instanceof katex.ParseError) {
 
-    if (currentVal == '') {
+        } else {
+            throw e;
+        }
+    }
+
+
+    if (oldVal == '') {
       // Defensively return if the input is empty.
       return;
     }
