@@ -172,6 +172,8 @@ function startGame(useTimer) {
 async function loadProblem() {
     // clear current work
     $('#out').empty();
+    $('#solution-latex')[0].hidden = true;
+    $('#solution-title')[0].hidden = true;
     $('#user-input').val('');
 
     // reset styling

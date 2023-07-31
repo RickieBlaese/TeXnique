@@ -9,9 +9,11 @@ app.get("/pfwiki", async function (req, res) {
     let t, preproof;
     do {
         do {
-            t = await (await fetch("https://proofwiki.org/wiki/Special:Random")).text();
-            preproof = t.split('id="Proof"')[0];
-        } while (preproof.split("<dl>").length <= 1);
+            do {
+                t = await (await fetch("https://proofwiki.org/wiki/Special:Random")).text();
+                preproof = t.split('id="Proof"')[0];
+            } while (preproof.split("<dl>").length <= 1);
+        } while (preproof.split("<dl>")[1].split("</dl>")[0].split("<dd>") <= 1);
         let stex = preproof.split("<dl>")[1].split("</dl>")[0].split("<dd>")[1].split("</dd>")[0];
         stex = stex.replace(/<.*?>/g, "");
         stex = stex.replace(/\$$/, "").replace(/^\$/, "");
