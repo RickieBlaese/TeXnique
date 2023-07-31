@@ -219,6 +219,13 @@ main {
 	margin-bottom: auto;
 }
 
+#toggle-pfwiki-desc {
+	display: inline;
+	margin-left: 10px;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
 #options-container {
 	display: flex;
 	align-items: center;

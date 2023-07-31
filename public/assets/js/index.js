@@ -15,6 +15,7 @@ let mobile = false;
 let showShadow = false;
 let skippedProblems = [];
 let showSkipped = false;
+let pfwiki = false;
 
 function mobileCheck() {
   var check = false;
@@ -166,7 +167,7 @@ function startGame(useTimer) {
     }
 }
 
-function loadProblem() {
+async function loadProblem() {
     // clear current work
     $('#out').empty();
     $('#user-input').val('');
@@ -178,17 +179,37 @@ function loadProblem() {
       $('#user-input').focus();
     }
 
+    let target;
+    let origtex;
     // load problem
-    let target = problems[problemsOrder[problemNumber % problems.length]];
-    if (debug) {
-      target = problems[problemNumber + 179];
+    if (pfwiki) {
+        target = await (await fetch("http://localhost:3000/pfwiki")).json();
+        origtex = target.latex;
+        let t = String.raw`\newcommand{\map}[1]{#1(\checknextarg} \newcommand{\checknextarg}{\@ifnextchar\bgroup{\gobblenextarg}{)}} \newcommand{\gobblenextarg}[1]{, #1\@ifnextchar\bgroup{\gobblenextarg}{)}}` + "\n" +
+            String.raw`\newcommand{\set}[1]{\{#1\checknextarg} \newcommand{\setchecknextarg}{\@ifnextchar\bgroup{\setgobblenextarg}{\}}} \newcommand{\setgobblenextarg}[1]{, #1\@ifnextchar\bgroup{\setgobblenextarg}{\}}}` + "\n";
+        for (const [name, cmd] of Object.entries(macros)) {
+            t += "\\providecommand\\" + name;
+            if (typeof cmd == "string") {
+                t += "{" + cmd + "}";
+            } else {
+                t += "[" + cmd[1] + "]{" + cmd[0] + "}";
+            }
+            t += "\n";
+        }
+        target.latex = t + target.latex;
+    } else {
+        target = problems[problemsOrder[problemNumber % problems.length]];
+        if (debug) {
+          target = problems[problemNumber + 179];
+        }
+        origtex = target.latex;
     }
     problemNumber += 1;
 
     // load problem text
     let problemText = "Problem " + problemNumber + ": " + target.title;
     $("#problem-title").text(problemText);
-    problemPoints = Math.ceil(target.latex.length / 10.0);
+    problemPoints = Math.ceil(origtex.length / 10.0);
     let pointsText = "(" + problemPoints + ((problemPoints == 1) ? " point)" : " points)");
     $("#problem-points").text(pointsText);
 
@@ -314,10 +335,21 @@ $(document).ready(function() {
         $("#shadow-target").toggle();
     });
 
+    $("#pfwiki-checkbox").change(_ => {
+        pfwiki = !pfwiki;
+    });
+
     $("#l-shadow-checkbox").keydown(e => {
       if (e.which == 13 /* enter */) {
         $("#shadow-checkbox").prop("checked", !$("#shadow-checkbox").prop("checked"));
         $("#shadow-target").toggle();
+      }
+    });
+
+    $("#l-pfwiki-checkbox").keydown(e => {
+      if (e.which == 13 /* enter */) {
+        $("#pfwiki-checkbox").prop("checked", !$("#pfwiki-checkbox").prop("checked"));
+          pfwiki = !pfwiki;
       }
     });
 
