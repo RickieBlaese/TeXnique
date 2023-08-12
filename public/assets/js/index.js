@@ -17,6 +17,7 @@ let skippedProblems = [];
 let showSkipped = false;
 
 let origtex = "";
+let rawresp = {};
 let pfwiki = false;
 
 function mobileCheck() {
@@ -187,6 +188,7 @@ async function loadProblem() {
     // load problem
     if (pfwiki) {
         target = await (await fetch("http://localhost:3000/pfwiki")).json();
+        rawresp = target;
         origtex = target.latex;
         target.latex = macroscmd + target.latex;
     } else {

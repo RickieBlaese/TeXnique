@@ -52,7 +52,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	// define __esModule on exports
 /******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 		}
 /******/ 		Object.defineProperty(exports, '__esModule', { value: true });
@@ -16555,7 +16555,7 @@ Parser_Parser.endOfGroup = {
    */
 
 };
-Parser_Parser.SUPSUB_GREEDINESS = 1;
+Parser_Parser.SUPSUB_GREEDINESS = 0;
 
 // CONCATENATED MODULE: ./src/parseTree.js
 /**
