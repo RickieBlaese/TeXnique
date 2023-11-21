@@ -15,7 +15,7 @@ app.get("/pfwiki", async function (req, res) {
                         t = await (await fetch("https://proofwiki.org/wiki/Special:RandomRootpage")).text();
                     } while (t.indexOf('id="Proof"') == -1);
                     preproof = t.split('id="Proof"')[0];
-                } while (preproof.split("<dl>").length <= 1 || t.split('class="firstHeading">')[1].split("</h1>")[0].toLowerCase().indexOf("example") != -1);
+                } while (preproof.split("<dl>").length <= 1 || t.split('class="mw-page-title-main">')[1].split("</span>")[0].toLowerCase().indexOf("example") != -1);
             } while (preproof.split("<dl>")[1].split("</dl>")[0].split("<dd>").length <= 1);
         } while (preproof.split("<dl>")[1].split("</dl>")[0].split("<dd>")[1].split("</dd>")[0].indexOf("$") == -1);
         let stex = preproof.split("<dl>")[1].split("</dl>")[0].split("<dd>")[1].split("</dd>")[0];
@@ -48,7 +48,7 @@ app.get("/pfwiki", async function (req, res) {
         }
     } while (tex == "");
     target.latex = tex;
-    target.title = t.split('class="firstHeading">')[1].split("</h1>")[0];
+    target.title = t.split('class="mw-page-title-main">')[1].split("</span>")[0];
     res.set("Access-Control-Allow-Origin", "*");
     res.send(JSON.stringify(target));
     return 200;

@@ -58,6 +58,15 @@ main {
 	margin-top: 7px;
 }
 
+#proofwiki-hint-list {
+	padding-inline-start: 30px;
+	margin-top: 6px;
+}
+
+#proofwiki-hint-list li {
+	margin-top: 7px;
+}
+
 .latex-button {
 	font-family: Katex_Main, serif;
 	font-size: 1em;
