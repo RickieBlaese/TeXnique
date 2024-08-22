@@ -63,6 +63,3 @@ node_modules/
 
 # dotenv environment variables file
 .env
-
-# personal run sh
-s.sh
